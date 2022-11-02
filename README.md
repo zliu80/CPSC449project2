@@ -1,14 +1,15 @@
-# CPSC-449-project1
+# CPSC-449-project2
+
+    Add your name here
 
     Team Members:
 
     Zhiqiang Liu 
 
-github repository: https://github.com/zliu80/449project1
 
 # Initialize the database
 
-cd 449project1/
+cd CPSC449project2/
 
 Under the project directory, type:
 
