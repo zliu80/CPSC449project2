@@ -5,6 +5,7 @@
     Team Members:
 
     Zhiqiang Liu 
+    Sam Le
 
 
 # Initialize the database
