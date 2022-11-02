@@ -6,6 +6,7 @@
 
     Zhiqiang Liu 
     Sam Le
+    Kirti Chaudjary
 
 
 # Initialize the database
