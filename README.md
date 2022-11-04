@@ -7,6 +7,7 @@
     Zhiqiang Liu 
     Sam Le
     Kirti Chaudjary
+    Shridhar Bhardwaj
 
 
 # Initialize the database
