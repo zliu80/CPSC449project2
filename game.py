@@ -36,7 +36,7 @@ async def index():
 async def start_new_game():
     msg = ""
     data = None
-    username = ""
+    username = None
     try:
         # Get the username from client
         
@@ -91,7 +91,7 @@ async def guess():
     msg = ""
     words_analysis_list = None
     #username = request.args.get('username')
-    username = ""
+    username = None
     if request.authorization is not None:
     	    username = request.authorization.username  
     
@@ -175,7 +175,7 @@ async def guess():
 @app.route("/allgame")
 async def allGame():
     listGame = []
-    username = ""
+    username = None
     try:
         #username = request.args.get('username')
         if request.authorization is not None:
