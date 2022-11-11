@@ -9,35 +9,41 @@ from service.DBServiceModule import DBService
 app = Quart(__name__)
 QuartSchema(app)
 
+# For testing in pycharm
 app.config.from_file(f"etc/game.toml", toml.load)
-# app.config.from_file(f"etc/{__name__}.toml", toml.load)
+#app.config.from_file(f"etc/{__name__}.toml", toml.load)
 DBService.db_url = app.config["DATABASES"]["URL"]
 DBService.db_path = app.config['DATABASES']["DB_PATH"]
 gameService = GameService()
 
-# **************************************************************#
-# **************************** User ****************************#
-# **************************************************************#
-# **************************************************************#
-# **************************** User ****************************#
-# **************************************************************#
-@app.route('/')
-async def index():
 
-    return {"msg": "Welcome to the Wordle game."}
+
 
 
 # **************************************************************#
 # **************************** Game ****************************#
 # **************************************************************#
+
+@app.route('/')
+async def index():
+    username = ""
+    if request.authorization is not None:
+    	    username = request.authorization.username   
+    return {"authentificated user":username, "msg": "Welcome to the Wordle game. To play the game, you may visit http://tuffix-vm/docs to see the API, or see README.md"}
+    
+    
 @app.route('/startgame')
 async def start_new_game():
     msg = ""
     data = None
+    username = ""
     try:
         # Get the username from client
-        username = request.args.get('username')
-        if username is None:
+        
+        #username = request.args.get('username')
+        if request.authorization is not None:
+    	    username = request.authorization.username  
+        elif username is None:
             return {"msg": "To start a new game, the username must be provided."}
 
         # ******************** Project 2, User and Game Separate, so skip validation.
@@ -84,7 +90,11 @@ def word_analysis(word, correct_word):
 async def guess():
     msg = ""
     words_analysis_list = None
-    username = request.args.get('username')
+    #username = request.args.get('username')
+    username = ""
+    if request.authorization is not None:
+    	    username = request.authorization.username  
+    
     game_id = request.args.get("game_id")
     word = request.args.get('word')
     if username is None:
@@ -165,8 +175,11 @@ async def guess():
 @app.route("/allgame")
 async def allGame():
     listGame = []
+    username = ""
     try:
-        username = request.args.get('username')
+        #username = request.args.get('username')
+        if request.authorization is not None:
+    	    username = request.authorization.username  
         if username is None:
             return {"msg": "Require an username to do this search."}
 
@@ -234,8 +247,7 @@ def conflict(e):
 
 if __name__ == '__main__':
     try:
-        DBService.db_url = app.config["DATABASES"]["URL"]
-        DBService.db_path = app.config['DATABASES']["DB_PATH"]
+
         if DBService.db_url is None or DBService.db_path is None:
             print("The system initialization failed! Check the db address.")
 
