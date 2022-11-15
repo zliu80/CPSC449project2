@@ -148,14 +148,39 @@ Project 1:
 
     http://localhost:5000/retrievegame?game_id=1
 
+
+# Example show
+
 Register:
-<img width="530" alt="image" src="https://user-images.githubusercontent.com/98377452/201836394-29dec9e4-295c-4c08-9cc4-4a1800666fdd.png">
+
+<img width="515" alt="image" src="https://user-images.githubusercontent.com/98377452/201837505-6613fc2f-242e-41ea-b14c-7d86cbc09dfc.png">
 
 startgame:
+
 There will be auth if the users have not logged in. Use the above username and password to log in
+
 <img width="977" alt="image" src="https://user-images.githubusercontent.com/98377452/201836582-c9b432cb-b29e-4df3-aece-3e538b174501.png">
 
 If the user can't pass the auth
+
 <img width="1014" alt="image" src="https://user-images.githubusercontent.com/98377452/201836736-a358ad0f-fdce-4640-8e35-eccf77aecf2c.png">
 
+Success
 
+<img width="506" alt="image" src="https://user-images.githubusercontent.com/98377452/201837826-b0cff198-221c-4a2a-a11b-b9079387c896.png">
+
+Guess a word:
+
+Use the game_id from the above image and guess a word whahever you want.
+
+<img width="504" alt="image" src="https://user-images.githubusercontent.com/98377452/201838007-92e4620a-09bb-4e1f-bd97-3940cb26c24e.png">
+
+List all game:
+
+<img width="362" alt="image" src="https://user-images.githubusercontent.com/98377452/201838100-78952511-5883-4fa2-b0b4-c13fc6168078.png">
+
+Retrieve a game
+
+Use the game_id from the above image
+
+<img width="428" alt="image" src="https://user-images.githubusercontent.com/98377452/201838223-5f0ce995-068b-4d90-af78-efba4fc2f49b.png">
