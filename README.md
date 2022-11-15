@@ -175,6 +175,12 @@ Use the game_id from the above image and guess a word whahever you want.
 
 <img width="504" alt="image" src="https://user-images.githubusercontent.com/98377452/201838007-92e4620a-09bb-4e1f-bd97-3940cb26c24e.png">
 
+Note: the returned json will tell you
+
+wrong_spot means this character is in the correct word but not in the correct spot.
+
+correct_spot means this character is in the correct word.
+
 List all game:
 
 <img width="362" alt="image" src="https://user-images.githubusercontent.com/98377452/201838100-78952511-5883-4fa2-b0b4-c13fc6168078.png">
