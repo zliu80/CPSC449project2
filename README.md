@@ -22,46 +22,129 @@ If the permission is denied. try:
 
 sh ./bin/init.sh
 
-# Start the API service
+# Split into two services.
 
-foreman start
+user.py is for User Service, database userdb file in var/primary/mount/
 
-# Testing API
+game.py is for Game Service, database gamedb file in var/primary/mount/
 
-See http://127.0.0.1:5000/docs
+# Instructions
 
-Or
+Before you start, you should note that our Auth service is running on localhost:5000, Game service is running on localhost:5100. After setup, the Nginx server will not let you to visit the Game service unless you pass the Auth.
 
-1. Find All user
+1. Set up the nginx server
 
-    GET: curl -v http://localhost:5000/
-
-2. Register
-
-    GET: curl -v "http://localhost:5000/register?username=jacob&password=123456"
+        cd /etc/nginx/sites-enabled
     
-    POST: curl -X POST -d 'username=jacob' -d 'password=123456' http://localhost:5000/register
+        sudo vim tutorial
+
+2. Updating the tutorial file, see tutorial-user-authentification, this file is under the root.
+       
+        server{
+            listen 80;
+            listen [::]:80;
+            server_name tuffix-vm;
+
+            location / {
+                    auth_request /auth;
+                    auth_request_set $auth_cookie $upstream_http_set_cookie;
+                    auth_request_set $auth_status $upstream_status;
+                    proxy_pass http://localhost:5100;
+            }
+
+            location = /auth {
+                    internal;
+                    proxy_pass http://localhost:5000;
+                    proxy_pass_request_body off;
+                    proxy_set_header Content-Length "";
+                    proxy_set_header X-Original-URI $request_uri;
+                    proxy_set_header X-Original-Remote-Addr $remote_addr;
+                    proxy_set_header X-Original-Host $host;
+            }
+
+            location ~ ^/(register)$ {
+                    proxy_pass http://localhost:5000;
+                    proxy_set_header X-Original-URI $request_uri;
+                    proxy_set_header X-Original-Remote-Addr $remote_addr;
+                    proxy_set_header X-Original-Host $host;
+            }
+
+            location = /css/skeleton.css {
+                    proxy_pass http://localhost:5000;
+            }
+        }
+
+    After updating tutorial, restart nginx
+
+        sudo service nginx restart
     
-3. Login(Support GET/POST request)
+3. Start User (port: 5000) and Game (port: 5100) Service.
 
-    GET: curl -v "http://localhost:5000/login?username=jacob&password=123456"
+        foreman start
     
-    POST: curl -X POST -d 'username=jacob' -d 'password=123456' http://localhost:5000/login
+visit http://tuffix-vm, you will see the authentification dialog if you have not logged in.
 
-3. Start a new game
+<img width="1223" alt="image" src="https://user-images.githubusercontent.com/98377452/200998703-dbe7bab7-2e57-4200-8a45-55154ff4e5c7.png">
 
-    GET: curl -v "http://localhost:5000/startgame?username=jacob"
+# User API
 
-    Copy the game_id for next step.
-4. Guess a word
+There are only two API. 1). auth 2). register
 
-    GET: curl -v "http://localhost:5000/guess?username=jacob&game_id=1&word=mixed"
+In order to visit the game service, you must pass the authentification (all game API require auth).
+
+However, you will be able to register without authentification.
+
+try http://tuffix-vm/register?username ='yourusername' & password = 'yourpassword'
+
+# Game API
+
+See http://tuffix-vm/docs
+
+Note: 
+
+1. The User API won't be in this docs.
+
+2. The username is not required to pass in to the game service. We can get the username after authentification.
+
+API List (We are Project 2 Now):
+
+1.  Start a new game
     
-5. List all game of an user
+Project 2: 
 
-    GET: curl -v "http://localhost:5000/allgame?username=jacob"
+    http://tuffix-vm/startgame
 
-6. Retrieve a game with the game_id
+Project 1: 
 
-    GET: curl -v "http://localhost:5000/retrievegame?game_id=1"
-    
+    http://localhost:5000/startgame?username=jacob
+
+2. Guess a word
+
+Project 2: 
+
+    http://tuffix-vm/guess?game_id=1&word=guess
+
+Project 1: 
+
+    http://localhost:5000/guess?username=jacob&game_id=1&word=mixed
+
+3. List all game of the current user
+
+Project 2: 
+
+    http://tuffix-vm/allgame
+
+Project 1: 
+
+    http://localhost:5000/allgame?username=jacob
+
+4. Retrieve a game with the game_id
+
+Project 2: 
+
+    http://tuffix-vm/retrievegame?game_id=1
+
+Project 1: 
+
+    http://localhost:5000/retrievegame?game_id=1
+
