@@ -1,1 +1,2 @@
-api: hypercorn game --reload --debug --bind game.local.gd:$PORT --access-logfile - --error-logfile - --log-level DEBUG
+api: bin/litefs -config etc/primary.yml
+api: bin/litefs -config etc/secondary.yml
