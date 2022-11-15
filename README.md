@@ -148,3 +148,14 @@ Project 1:
 
     http://localhost:5000/retrievegame?game_id=1
 
+Register:
+<img width="530" alt="image" src="https://user-images.githubusercontent.com/98377452/201836394-29dec9e4-295c-4c08-9cc4-4a1800666fdd.png">
+
+startgame:
+There will be auth if the users have not logged in. Use the above username and password to log in
+<img width="977" alt="image" src="https://user-images.githubusercontent.com/98377452/201836582-c9b432cb-b29e-4df3-aece-3e538b174501.png">
+
+If the user can't pass the auth
+<img width="1014" alt="image" src="https://user-images.githubusercontent.com/98377452/201836736-a358ad0f-fdce-4640-8e35-eccf77aecf2c.png">
+
+
