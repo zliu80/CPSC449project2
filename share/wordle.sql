@@ -1,7 +1,6 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE ValidWords(id integer primary key, name varchar(128) not null, status integer defautlt '0');
-CREATE TABLE Users(username varchar(128) primary key, password varchar(128));
 CREATE TABLE Game(game_id integer primary key, number_of_guesses integer, max_guess integer, status integer, username varchar(128) not null, secret_word_id integer not null, constraint fk_user foreign key (username) references User(username), constraint fk_valid_words foreign key (secret_word_id) references ValidWords(id) );
 CREATE TABLE Guess(id integer primary key, game_id integer not null, guessword_id integer not null, constraint fk_game foreign key (game_id) references Game(game_id), constraint fk_guess_valid_words foreign key (guessword_id) references ValidWords(id));
 
