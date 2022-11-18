@@ -123,8 +123,8 @@ async def guess():
         game = Game(_game['game_id'], _game['number_of_guesses'], _game['max_guess'], _game['status'],
                     _game['username'], _game['secret_word_id'])
 
-        # if user.username != game.username:
-        #     return {"msg": "The game belongs to another user. You can't play others game."}
+        if username != game.username:
+            return {"msg": "The game belongs to another user. You can't play others game."}
 
         if game.status == 1:
             return {"msg": "The game was finished. You won."}

@@ -39,48 +39,66 @@ Before you start, you should note that our Auth service is running on localhost:
         sudo vim tutorial
 
 2. Updating the tutorial file, see tutorial-user-authentification, this file is under the root.
-       
-        server{
-            listen 80;
-            listen [::]:80;
-            server_name tuffix-vm;
 
-            location / {
-                    auth_request /auth;
-                    auth_request_set $auth_cookie $upstream_http_set_cookie;
-                    auth_request_set $auth_status $upstream_status;
-                    proxy_pass http://localhost:5100;
-            }
+Notice here the PORT number for service are hardcoded in nginx config
+```
+user service: 5000
+game service: 5100, 5101, 5103, the port number incrementation is 1 each time which is the way foreman works
 
-            location = /auth {
-                    internal;
-                    proxy_pass http://localhost:5000;
-                    proxy_pass_request_body off;
-                    proxy_set_header Content-Length "";
-                    proxy_set_header X-Original-URI $request_uri;
-                    proxy_set_header X-Original-Remote-Addr $remote_addr;
-                    proxy_set_header X-Original-Host $host;
-            }
+upstream backend {
+        server localhost:5100; // We only do 3 here
+        server localhost:5101;
+        server localhost:5102;
+}
+```
 
-            location ~ ^/(register)$ {
-                    proxy_pass http://localhost:5000;
-                    proxy_set_header X-Original-URI $request_uri;
-                    proxy_set_header X-Original-Remote-Addr $remote_addr;
-                    proxy_set_header X-Original-Host $host;
-            }
+*** Copy pasting this for nginx could potentially cause strange issue where nginx will not working properly such as throwing 500 server error even when nginx starts up ok. Restarting might not help. 
 
-            location = /css/skeleton.css {
-                    proxy_pass http://localhost:5000;
-            }
+What we recommend you do is go back to the default nginx, restart to make sure it works. Then copy paste block by block starting at the most basic nginx config, restart and make sure it works. Then restart nginx and copy another block and so on. Sometimes, when copying over material the result may contain strange invisible white spaces character that you may not notice which might result in those issues.
+
+```       
+        upstream backend {
+                server localhost:5100;
+                server localhost:5101;
+                server localhost:5102;
         }
+        server{
+                listen 80;
+                listen [::]:80;
+                server_name tuffix-vm;
 
-    After updating tutorial, restart nginx
+                location / {
+                        auth_request /auth;
+                        auth_request_set $auth_cookie $upstream_http_set_cookie;
+                        auth_request_set $auth_status $upstream_status;
+                        proxy_pass http://backend;
+                }
+
+                location = /auth {
+                        internal;
+                        proxy_pass http://localhost:5000;
+                        proxy_pass_request_body off;
+                        proxy_set_header Content-Length "";
+                        proxy_set_header X-Original-URI $request_uri;
+                        proxy_set_header X-Original-Remote-Addr $remote_addr;
+                        proxy_set_header X-Original-Host $host;
+                }
+
+                location ~ ^/(register)$ {
+                        proxy_pass http://localhost:5000;
+                        proxy_set_header X-Original-URI $request_uri;
+                        proxy_set_header X-Original-Remote-Addr $remote_addr;
+                        proxy_set_header X-Original-Host $host;
+                }
+        }
+```
+3. After updating tutorial, restart nginx
 
         sudo service nginx restart
     
-3. Start User (port: 5000) and Game (port: 5100) Service.
+4. Start User (port: 5000) and Game (port: 5100, 5101, 5102) Service.
 
-        foreman start
+        foreman start --formation user=1,game=3 --port 5000 
     
 visit http://tuffix-vm, you will see the authentification dialog if you have not logged in.
 
@@ -94,7 +112,8 @@ In order to visit the game service, you must pass the authentification (all game
 
 However, you will be able to register without authentification.
 
-try http://tuffix-vm/register?username ='yourusername' & password = 'yourpassword'
+GET: http://tuffix-vm/register?username=yourusername&password=yourpassword
+POST using httpie: http --form POST http://tuffix-vm/register username="username1" password="password"
 
 # Game API
 
@@ -190,3 +209,5 @@ Retrieve a game
 Use the game_id from the above image
 
 <img width="428" alt="image" src="https://user-images.githubusercontent.com/98377452/201838223-5f0ce995-068b-4d90-af78-efba4fc2f49b.png">
+
+Load balancing: game service getting accessed in Round Robin fashion
