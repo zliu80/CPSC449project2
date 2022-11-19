@@ -211,3 +211,4 @@ Use the game_id from the above image
 <img width="428" alt="image" src="https://user-images.githubusercontent.com/98377452/201838223-5f0ce995-068b-4d90-af78-efba4fc2f49b.png">
 
 Load balancing: game service getting accessed in Round Robin fashion
+![image](https://user-images.githubusercontent.com/67793141/202825231-2199edce-3ffb-4718-9d1a-5c39c38c696f.png)
